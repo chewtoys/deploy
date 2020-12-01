@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    deploy:
+      replicas: 40
+    logging:
+      options:
+        max-size: "512m"
+
+  mongo:
+    deploy:
+      mode: global
+    image: pastvu/mongo:3.2.22
+    networks:
+      - mongo
+    volumes:
+      - mongo:/data/db
+    logging:
+      options:
+        max-size: "512m"
+
+  app_ru:
+    deploy:
+      replicas: 10
+    secrets:
+      - pastvu_smtp_host
+      - pastvu_smtp_user
+      - pastvu_smtp_pass
+      - pastvu_log_pass
+      - pastvu_yandex_api_key
+      - pastvu_google_api_key
+    logging:
+      options:
+        max-size: "512m"
+
+  app_en:
+    deploy:
+      replicas: 10
+    secrets:
+      - pastvu_smtp_host
+      - pastvu_smtp_user
+      - pastvu_smtp_pass
+      - pastvu_log_pass
+      - pastvu_yandex_api_key
+      - pastvu_google_api_key
+    logging:
+      options:
+        max-size: "512m"
+
+  api:
+    deploy:
+      replicas: 5
+    image: pastvu/pastvu:${TAG?ERR}
+    networks:
+      - backend
+    configs:
+      - config.js
+
+  uploader:
+    deploy:
+      mode: global
+
+  notifier_ru:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+    networks:
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    environment:
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    configs:
+      - config.js
+    secrets:
+      - pastvu_smtp_host
+      - pastvu_smtp_user
+      - pastvu_smtp_pass
+      - pastvu_log_pass
+    logging:
+      options:
+        max-size: "512m"
+ 
+  notifier_en:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+    networks:
+      - backend
+    image: pastvu/pastvu:${EN_TAG?ERR}
+    environment:
+      - LANG=en
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    configs:
+      - config.js
+    secrets:
+      - pastvu_smtp_host
+      - pastvu_smtp_user
+      - pastvu_smtp_pass
+      - pastvu_log_pass
+    logging:
+      options:
+        max-size: "512m"
+
+networks:
+  mongo:
+    driver: overlay
+    attachable: true
+  backend:
+
+secrets:
+  pastvu_smtp_host:
+    external: true
+  pastvu_smtp_user:
+    external: true
+  pastvu_smtp_pass:
+    external: true
+  pastvu_log_pass:
+    external: true
+  pastvu_yandex_api_key:
+    external: true
+  pastvu_google_api_key:
+    external: true
+
+configs:
+  config.js:
+    file: ${CONFIG}
+    name: pastvu_config_${CONFIG_TAG}
+
+volumes:
+  mongo:

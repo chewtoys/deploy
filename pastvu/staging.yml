@@ -1,0 +1,124 @@
+version: '3.8'
+
+services:
+
+  api:
+    deploy:
+      replicas: 5
+    image: pastvu/pastvu:${TAG?ERR}
+    networks:
+      - backend
+    configs:
+      - config.js
+
+  nginx:
+    deploy:
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+      replicas: 2
+
+  mongo:
+    image: ${MONGO_IMAGE}
+    volumes:
+      - mongo:/data/db
+
+  app_ru:
+    deploy:
+      replicas: 4
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+      update_config:
+        order: start-first
+    secrets:
+      - pastvu_log_pass
+    networks:
+      - mailcatcher
+
+  app_en:
+    deploy:
+      replicas: 4
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+      update_config:
+        order: start-first
+    secrets:
+      - pastvu_log_pass
+    networks:
+      - mailcatcher
+    
+  uploader:
+    deploy:
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+        
+  downloader:
+    deploy:
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+
+  sitemap:
+    deploy:
+      labels:
+        swarmpit.service.deployment.autoredeploy: 'true'
+
+  notifier_ru:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+    networks:
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    environment:
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    configs:
+      - config.js
+    secrets:
+      - pastvu_log_pass
+    logging:
+      options:
+        max-size: "512m"
+ 
+  notifier_en:
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+    networks:
+      - backend
+    image: pastvu/pastvu:${EN_TAG?ERR}
+    environment:
+      - LANG=en
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    configs:
+      - config.js
+    secrets:
+      - pastvu_log_pass
+    logging:
+      options:
+        max-size: "512m"
+
+networks:
+  backend:
+    driver: overlay
+    attachable: true
+  mailcatcher:
+
+
+secrets:
+  pastvu_log_pass:
+
+configs:
+  config.js:
+    file: ${CONFIG}
+    name: pastvu_config_${CONFIG_TAG}
+
+volumes:
+  mongo:
+    name: ${MONGO_VOLUME}

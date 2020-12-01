@@ -1,0 +1,89 @@
+version: '3.8'
+services:
+
+  nginx:
+    image: pastvu/nginx:${TAG?ERR}
+    networks:
+      - frontend
+    volumes:
+      - store:/store:ro
+      - sitemap:/sitemap:ro
+
+  mongo:
+    networks:
+      - backend
+
+  redis:
+    networks:
+      - backend
+    image: redis:5.0.7
+
+  app_ru:
+    networks:
+      - frontend
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    volumes:
+      - store:/store
+    environment:
+      - DOMAIN
+      - PROTOCOL
+    configs:
+      - config.js
+
+  app_en:
+    networks:
+      - frontend
+      - backend
+    image: pastvu/pastvu:${EN_TAG?ERR}
+    environment:
+      - LANG=en
+      - DOMAIN
+      - PROTOCOL
+    volumes:
+      - store:/store
+    configs:
+      - config.js
+
+  uploader:
+    networks:
+      - frontend
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    environment:
+      - MODULE=uploader
+    volumes:
+      - store:/store
+    configs:
+      - config.js
+
+  downloader:
+    networks:
+      - frontend
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    environment:
+      - MODULE=downloader
+    volumes:
+      - store:/store:ro
+    configs:
+      - config.js
+
+  sitemap:
+    networks:
+      - backend
+    image: pastvu/pastvu:${TAG?ERR}
+    environment:
+      - MODULE=sitemap
+    volumes:
+      - sitemap:/sitemap
+    configs:
+      - config.js
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  store:
+  sitemap:

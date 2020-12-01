@@ -1,0 +1,8 @@
+#!/bin/bash
+# test configuration file with eslint
+function eslint()
+{
+	(cd `dirname $1`
+	test -d node_modules || docker run --rm -v `pwd`:/config -w /config node npm i
+	docker run --rm -v `pwd`:/config -w /config node yarn run eslint `basename $1`)
+}

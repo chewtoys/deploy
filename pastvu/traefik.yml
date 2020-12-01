@@ -1,0 +1,149 @@
+version: '3.8'
+services:
+  nginx:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # MIDDLEWARE DEFINITIONS
+        # REDIRECT WWW TO NON-WWW
+        - traefik.http.middlewares.www-redirect.redirectregex.regex=^https?://w+\.${DOMAIN}/(.*)
+        - traefik.http.middlewares.www-redirect.redirectregex.replacement=https://${DOMAIN}/$${1}
+        - traefik.http.middlewares.www-redirect.redirectregex.permanent=true
+
+        # HTTP
+        - traefik.http.routers.pastvu-http.rule=HostRegexp(`${DOMAIN}`,`{sub:w+}.${DOMAIN}`)
+        - traefik.http.routers.pastvu-http.entrypoints=http
+        - traefik.http.routers.pastvu-http.middlewares=www-redirect,https-redirect
+
+        # HTTPS
+        - traefik.http.routers.pastvu-nginx.rule=Host(`${DOMAIN}`)&&PathPrefix(`/download`, `/sitemap`, `/files`, `/_`, `/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`)
+        - traefik.http.routers.pastvu-nginx.entrypoints=https
+        - traefik.http.routers.pastvu-nginx.tls=true
+        - traefik.http.routers.pastvu-nginx.tls.certresolver=le
+        - traefik.http.routers.pastvu-nginx.priority=200
+
+        # ENABLE LOADBALANCER
+        - traefik.http.services.pastvu-nginx.loadbalancer.server.port=80
+
+  api:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # CORS MIDDLEWARE
+        - traefik.http.middlewares.cors-headers.headers.accesscontrolalloworiginlist=*
+
+        # API
+        - traefik.http.routers.pastvu-api.rule=Host(`${DOMAIN}`)&&PathPrefix(`/api2`)
+        - traefik.http.routers.pastvu-api.entrypoints=https
+        - traefik.http.routers.pastvu-api.tls=true
+        - traefik.http.routers.pastvu-api.tls.certresolver=le
+        - traefik.http.routers.pastvu-api.middlewares=cors-headers
+        - traefik.http.routers.pastvu-api.priority=100
+
+        # LOADBALANCER
+        - traefik.http.services.pastvu-api.loadbalancer.server.port=3000
+
+  app_ru:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # DEFAULT
+        - traefik.http.routers.pastvu-ru.rule=Host(`${DOMAIN}`, `www.${DOMAIN}`)&&HeadersRegexp(`Cookie`, `.*lang=ru.*`)
+        - traefik.http.routers.pastvu-ru.entrypoints=https
+        - traefik.http.routers.pastvu-ru.middlewares=www-redirect
+        - traefik.http.routers.pastvu-ru.tls=true
+        - traefik.http.routers.pastvu-ru.tls.certresolver=le
+        - traefik.http.routers.pastvu-ru.priority=50
+
+        # LOADBALANCER
+        - traefik.http.services.pastvu-ru.loadbalancer.server.port=3000
+        - traefik.http.services.pastvu-ru.loadbalancer.sticky.cookie=true
+        - traefik.http.services.pastvu-ru.loadbalancer.sticky.cookie.name=app_ru
+
+  app_en:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # MAIN
+        - traefik.http.routers.pastvu-en.rule=Host(`${DOMAIN}`, `www.${DOMAIN}`)
+        - traefik.http.routers.pastvu-en.entrypoints=https
+        - traefik.http.routers.pastvu-en.middlewares=www-redirect
+        - traefik.http.routers.pastvu-en.tls=true
+        - traefik.http.routers.pastvu-en.tls.certresolver=le
+        - traefik.http.routers.pastvu-en.priority=20
+
+        # LOADBALANCER
+        - traefik.http.services.pastvu-en.loadbalancer.server.port=3000
+        - traefik.http.services.pastvu-en.loadbalancer.sticky.cookie=true
+        - traefik.http.services.pastvu-en.loadbalancer.sticky.cookie.name=app_en
+
+  uploader:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # HTTPS
+        - traefik.http.routers.pastvu-uploader.rule=Host(`${DOMAIN}`)&&PathPrefix(`/upload`)
+        - traefik.http.routers.pastvu-uploader.entrypoints=https
+        - traefik.http.routers.pastvu-uploader.tls=true
+        - traefik.http.routers.pastvu-uploader.tls.certresolver=le
+        - traefik.http.routers.pastvu-uploader.priority=300
+
+        # ENABLE LOADBALANCER
+        - traefik.http.services.pastvu-uploader.loadbalancer.server.port=3001
+
+  downloader:
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.labels.pastvu.pastvu-data == true
+
+networks:
+  traefik-public:
+    external: true
