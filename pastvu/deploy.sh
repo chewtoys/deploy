@@ -26,9 +26,11 @@ export CONFIG=./config/$PASTVU_ENV.js
 export CONFIG_TAG=$(cat $CONFIG|mktag)
 export DEPLOY_TAG=$(date|mktag)
 export TAG
-export EN_TAG
+export TAG_EN
 
-set
+echo ================================
+env|sort
+echo ================================
 echo Does environment look reasonable?
 echo Enter to proceed, Ctrl+C to cancel.
 read

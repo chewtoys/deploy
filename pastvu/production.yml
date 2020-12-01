@@ -98,7 +98,7 @@ services:
           - node.labels.pastvu.pastvu-data == true
     networks:
       - backend
-    image: pastvu/pastvu:${EN_TAG:?ERR}
+    image: pastvu/pastvu:${TAG_EN:?ERR}
     environment:
       - LANG=en
       - NOTIFIER=true
