@@ -113,6 +113,7 @@ networks:
 
 secrets:
   pastvu_log_pass:
+    external: true
 
 configs:
   config.js:
