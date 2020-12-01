@@ -62,6 +62,10 @@ services:
     deploy:
       mode: global
 
+  downloader:
+    deploy:
+      replicas: 3
+
   notifier_ru:
     deploy:
       mode: global
