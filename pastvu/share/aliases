@@ -1,0 +1,2 @@
+#!/bin/bash
+alias mktag="shasum|cut -c1-16"
