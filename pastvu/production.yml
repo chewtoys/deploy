@@ -52,7 +52,7 @@ services:
   api:
     deploy:
       replicas: 5
-    image: pastvu/pastvu:${TAG?ERR}
+    image: pastvu/pastvu:${TAG:?ERR}
     networks:
       - backend
     configs:
@@ -70,7 +70,7 @@ services:
           - node.labels.pastvu.pastvu-data == true
     networks:
       - backend
-    image: pastvu/pastvu:${TAG?ERR}
+    image: pastvu/pastvu:${TAG:?ERR}
     environment:
       - NOTIFIER=true
       - DOMAIN
@@ -94,7 +94,7 @@ services:
           - node.labels.pastvu.pastvu-data == true
     networks:
       - backend
-    image: pastvu/pastvu:${EN_TAG?ERR}
+    image: pastvu/pastvu:${EN_TAG:?ERR}
     environment:
       - LANG=en
       - NOTIFIER=true
@@ -133,8 +133,8 @@ secrets:
 
 configs:
   config.js:
-    file: ${CONFIG}
-    name: pastvu_config_${CONFIG_TAG}
+    file: ${CONFIG:?ERR}
+    name: pastvu_config_${CONFIG_TAG:?ERR}
 
 volumes:
   mongo:
