@@ -10,7 +10,7 @@ NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
 export PROTOCOL
 export DOMAIN
 export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(echo $CONFIG|mktag)
+export CONFIG_TAG=$(cat $CONFIG|mktag)
 export DEPLOY_TAG=$(date|mktag)
 
 set
