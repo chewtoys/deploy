@@ -13,13 +13,11 @@ services:
     logging: *default-logging
 
   mongo:
+    image: pastvu/mongo:3.2.22
     deploy:
       mode: global
-    image: pastvu/mongo:3.2.22
     networks:
       - mongo
-    volumes:
-      - mongo:/data/db
     logging: *default-logging
 
   app_ru:

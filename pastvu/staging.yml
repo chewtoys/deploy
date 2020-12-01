@@ -26,8 +26,6 @@ services:
 
   mongo:
     image: ${MONGO_IMAGE}
-    volumes:
-      - mongo:/data/db
     logging: *default-logging
 
   app_ru:

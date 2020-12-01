@@ -12,6 +12,8 @@ services:
   mongo:
     networks:
       - backend
+    volumes:
+      - mongo:/data/db
 
   redis:
     networks:
