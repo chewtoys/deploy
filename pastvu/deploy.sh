@@ -1,8 +1,17 @@
-#!/usr/bin/env -i bash
+#!/usr/bin/env -S -i bash
 set -exu
+shopt -s expand_aliases
 source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
+
+NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
+# Pastvu config
+export PROTOCOL
+export DOMAIN
+export CONFIG=./config/$PASTVU_ENV.js
+export CONFIG_TAG=$(echo $CONFIG|mktag)
+export DEPLOY_TAG=$(date|mktag)
 
 set
 echo Does environment look reasonable?
@@ -24,14 +33,6 @@ esac
 
 export TAG
 export EN_TAG
-NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
-
-# Pastvu config
-export PROTOCOL
-export DOMAIN
-export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(echo $CONFIG|mktag)
-export DEPLOY_TAG=$(date|mktag)
 
 # Lint config
 eslint $CONFIG
