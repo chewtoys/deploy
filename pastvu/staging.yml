@@ -1,5 +1,10 @@
 version: '3.8'
 
+x-logging:
+  &default-logging
+  options:
+    max-size: "512m"
+
 services:
 
   api:
@@ -10,17 +15,20 @@ services:
       - backend
     configs:
       - config.js
+    logging: *default-logging
 
   nginx:
     deploy:
       labels:
         swarmpit.service.deployment.autoredeploy: 'true'
       replicas: 2
+    logging: *default-logging
 
   mongo:
     image: ${MONGO_IMAGE}
     volumes:
       - mongo:/data/db
+    logging: *default-logging
 
   app_ru:
     deploy:
@@ -33,6 +41,7 @@ services:
       - pastvu_log_pass
     networks:
       - mailcatcher
+    logging: *default-logging
 
   app_en:
     deploy:
@@ -45,21 +54,25 @@ services:
       - pastvu_log_pass
     networks:
       - mailcatcher
+    logging: *default-logging
     
   uploader:
     deploy:
       labels:
         swarmpit.service.deployment.autoredeploy: 'true'
+    logging: *default-logging
         
   downloader:
     deploy:
       labels:
         swarmpit.service.deployment.autoredeploy: 'true'
+    logging: *default-logging
 
   sitemap:
     deploy:
       labels:
         swarmpit.service.deployment.autoredeploy: 'true'
+    logging: *default-logging
 
   notifier_ru:
     deploy:
@@ -78,9 +91,7 @@ services:
       - config.js
     secrets:
       - pastvu_log_pass
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
  
   notifier_en:
     deploy:
@@ -100,9 +111,7 @@ services:
       - config.js
     secrets:
       - pastvu_log_pass
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
 networks:
   backend:

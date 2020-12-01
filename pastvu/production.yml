@@ -1,13 +1,16 @@
 version: '3.8'
 
+x-logging:
+  &default-logging
+  options:
+    max-size: "512m"
+
 services:
 
   nginx:
     deploy:
       replicas: 40
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
   mongo:
     deploy:
@@ -17,9 +20,7 @@ services:
       - mongo
     volumes:
       - mongo:/data/db
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
   app_ru:
     deploy:
@@ -31,9 +32,7 @@ services:
       - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
   app_en:
     deploy:
@@ -45,9 +44,7 @@ services:
       - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
   api:
     deploy:
@@ -57,14 +54,17 @@ services:
       - backend
     configs:
       - config.js
+    logging: *default-logging
 
   uploader:
     deploy:
       mode: global
+    logging: *default-logging
 
   downloader:
     deploy:
       replicas: 3
+    logging: *default-logging
 
   notifier_ru:
     deploy:
@@ -86,9 +86,7 @@ services:
       - pastvu_smtp_user
       - pastvu_smtp_pass
       - pastvu_log_pass
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
  
   notifier_en:
     deploy:
@@ -111,9 +109,7 @@ services:
       - pastvu_smtp_user
       - pastvu_smtp_pass
       - pastvu_log_pass
-    logging:
-      options:
-        max-size: "512m"
+    logging: *default-logging
 
 networks:
   mongo:
