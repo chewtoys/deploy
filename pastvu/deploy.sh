@@ -5,16 +5,6 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
-NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
-# Pastvu config
-export PROTOCOL
-export DOMAIN
-export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(cat $CONFIG|mktag)
-export DEPLOY_TAG=$(date|mktag)
-export TAG
-export EN_TAG
-
 case $PASTVU_ENV in
 	staging)
 		export MONGO_VOLUME
@@ -27,6 +17,16 @@ case $PASTVU_ENV in
 		exit 1
 		;;
 esac
+
+NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
+# Pastvu config
+export PROTOCOL
+export DOMAIN
+export CONFIG=./config/$PASTVU_ENV.js
+export CONFIG_TAG=$(cat $CONFIG|mktag)
+export DEPLOY_TAG=$(date|mktag)
+export TAG
+export EN_TAG
 
 set
 echo Does environment look reasonable?
