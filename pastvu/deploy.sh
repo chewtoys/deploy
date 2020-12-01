@@ -1,13 +1,9 @@
-#!/usr/bin/env -i bash
+#!/usr/bin/env -S -i bash
 set -exu
+shopt -s expand_aliases
 source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
-
-set
-echo Does environment look reasonable?
-echo Enter to proceed, Ctrl+C to cancel.
-read
 
 case $PASTVU_ENV in
 	staging)
@@ -22,16 +18,20 @@ case $PASTVU_ENV in
 		;;
 esac
 
-export TAG
-export EN_TAG
 NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
-
 # Pastvu config
 export PROTOCOL
 export DOMAIN
 export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(echo $CONFIG|mktag)
+export CONFIG_TAG=$(cat $CONFIG|mktag)
 export DEPLOY_TAG=$(date|mktag)
+export TAG
+export EN_TAG
+
+set
+echo Does environment look reasonable?
+echo Enter to proceed, Ctrl+C to cancel.
+read
 
 # Lint config
 eslint $CONFIG
