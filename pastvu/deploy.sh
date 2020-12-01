@@ -1,12 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env -i bash
 set -exu
-. share/eslint.subr
+source ./share/eslint.subr
+source ./share/aliases
+source ~/env/pastvu.env
 
-cat ~/env/pastvu.env
+set
 echo Does environment look reasonable?
 echo Enter to proceed, Ctrl+C to cancel.
 read
-source ~/env/pastvu.env
 
 case $PASTVU_ENV in
 	staging)
@@ -29,8 +30,8 @@ NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
 export PROTOCOL
 export DOMAIN
 export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(shasum $CONFIG|cut -c1-16)
-export DEPLOY_TAG=$(date|shasum|cut -c1-16)
+export CONFIG_TAG=$(echo $CONFIG|mktag)
+export DEPLOY_TAG=$(date|mktag)
 
 # Lint config
 eslint $CONFIG
