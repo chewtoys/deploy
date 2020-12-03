@@ -1,26 +1,25 @@
 version: '3.8'
 
-x-logging:
-  &default-logging
-  options:
-    max-size: "512m"
+x-defaults:
+  &production-defaults
+  logging:
+    options:
+      max-size: "512m"
 
 services:
 
   nginx:
+    << : *production-defaults
     deploy:
       replicas: 40
-    logging: *default-logging
 
   mongo:
-    image: pastvu/mongo:3.2.22
-    deploy:
-      mode: global
+    << : *production-defaults
     networks:
       - mongo
-    logging: *default-logging
 
   app_ru:
+    << : *production-defaults
     deploy:
       replicas: 10
     secrets:
@@ -30,9 +29,9 @@ services:
       - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
-    logging: *default-logging
 
   app_en:
+    << : *production-defaults
     deploy:
       replicas: 10
     secrets:
@@ -42,72 +41,35 @@ services:
       - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
-    logging: *default-logging
 
   api:
+    << : *production-defaults
     deploy:
       replicas: 5
-    image: pastvu/pastvu:${TAG:?ERR}
-    networks:
-      - backend
-    configs:
-      - config.js
-    logging: *default-logging
 
   uploader:
-    deploy:
-      mode: global
-    logging: *default-logging
+    << : *production-defaults
 
   downloader:
+    << : *production-defaults
     deploy:
       replicas: 3
-    logging: *default-logging
 
   notifier_ru:
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.pastvu.pastvu-data == true
-    networks:
-      - backend
-    image: pastvu/pastvu:${TAG:?ERR}
-    environment:
-      - NOTIFIER=true
-      - DOMAIN
-      - PROTOCOL
-    configs:
-      - config.js
+    << : *production-defaults
     secrets:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
       - pastvu_log_pass
-    logging: *default-logging
  
   notifier_en:
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.pastvu.pastvu-data == true
-    networks:
-      - backend
-    image: pastvu/pastvu:${TAG_EN:?ERR}
-    environment:
-      - LANG=en
-      - NOTIFIER=true
-      - DOMAIN
-      - PROTOCOL
-    configs:
-      - config.js
+    << : *production-defaults
     secrets:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
       - pastvu_log_pass
-    logging: *default-logging
 
 networks:
   mongo:

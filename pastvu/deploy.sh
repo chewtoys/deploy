@@ -7,8 +7,6 @@ source ~/env/pastvu.env
 
 case $PASTVU_ENV in
 	staging)
-		export MONGO_VOLUME
-		export MONGO_IMAGE
 		;;
 	production)
 		;;
@@ -43,6 +41,6 @@ docker node update --label-add pastvu.pastvu-data=true $NODE_ID
 docker stack deploy \
 	--prune \
 	-c pastvu.yml \
-	-c traefik.yml \
+	-c routing.yml \
 	-c $PASTVU_ENV.yml \
 	pastvu

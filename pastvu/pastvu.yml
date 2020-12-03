@@ -1,86 +1,139 @@
 version: '3.8'
+
+x-deploy:
+  &local-placement
+  placement:
+    constraints:
+      - node.labels.pastvu.pastvu-data == true
+x-app:
+  &app-default
+  image: pastvu/pastvu:${TAG?ERR}
+  configs:
+    - config.js
+
 services:
 
-  nginx:
-    image: pastvu/nginx:${TAG?ERR}
+  fileserver:
+    deploy: *local-placement
+    image: pastvu/fileserver:${TAG?ERR}
     networks:
       - frontend
     volumes:
       - store:/store:ro
       - sitemap:/sitemap:ro
 
+  frontend_ru:
+    image: pastvu/frontend:${TAG?ERR}
+
+  frontend_en:
+    image: pastvu/frontend:${TAG_EN?ERR}
+
+  app_ru:
+    << : *app-default
+    deploy: *local-placement
+    environment:
+      - DOMAIN
+      - PROTOCOL
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - store:/store
+
+  app_en:
+    << : *app-default
+    deploy: *local-placement
+    image: pastvu/pastvu:${TAG_EN?ERR}
+    networks:
+      - frontend
+      - backend
+    environment:
+      - DOMAIN
+      - PROTOCOL
+      - LANG=en
+    volumes:
+      - store:/store
+
+  notifier_ru:
+    << : *app-default 
+    networks:
+      - backend
+    environment:
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    deploy:
+      << : *local-placement
+      mode: global
+
+  notifier_en:
+    << : *app-default 
+    image: pastvu/pastvu:${TAG_EN:?ERR}
+    networks:
+      - backend
+    environment:
+      - LANG=en
+      - NOTIFIER=true
+      - DOMAIN
+      - PROTOCOL
+    deploy: 
+      << : *local-placement
+      mode: global
+
+  uploader:
+    << : *app-default
+    deploy:
+      << : *local-placement
+      mode: global
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MODULE=uploader
+    volumes:
+      - store:/store
+
+  downloader:
+    << : *app-default
+    deploy: *local-placement
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MODULE=downloader
+    volumes:
+      - store:/store:ro
+
+  sitemap:
+    << : *app-default
+    deploy: *local-placement
+    networks:
+      - backend
+    environment:
+      - MODULE=sitemap
+    volumes:
+      - sitemap:/sitemap
+
+  api:
+    << : *app-default
+    networks:
+      - backend
+
   mongo:
+    deploy:
+      << : *local-placement
+      mode: global
+    image: pastvu/mongo:3.2.22
     networks:
       - backend
     volumes:
       - mongo:/data/db
 
   redis:
-    networks:
-      - backend
     image: redis:5.0.7
-
-  app_ru:
-    networks:
-      - frontend
-      - backend
-    image: pastvu/pastvu:${TAG?ERR}
-    volumes:
-      - store:/store
-    environment:
-      - DOMAIN
-      - PROTOCOL
-    configs:
-      - config.js
-
-  app_en:
-    networks:
-      - frontend
-      - backend
-    image: pastvu/pastvu:${TAG_EN?ERR}
-    environment:
-      - LANG=en
-      - DOMAIN
-      - PROTOCOL
-    volumes:
-      - store:/store
-    configs:
-      - config.js
-
-  uploader:
-    networks:
-      - frontend
-      - backend
-    image: pastvu/pastvu:${TAG?ERR}
-    environment:
-      - MODULE=uploader
-    volumes:
-      - store:/store
-    configs:
-      - config.js
-
-  downloader:
-    networks:
-      - frontend
-      - backend
-    image: pastvu/pastvu:${TAG?ERR}
-    environment:
-      - MODULE=downloader
-    volumes:
-      - store:/store:ro
-    configs:
-      - config.js
-
-  sitemap:
     networks:
       - backend
-    image: pastvu/pastvu:${TAG?ERR}
-    environment:
-      - MODULE=sitemap
-    volumes:
-      - sitemap:/sitemap
-    configs:
-      - config.js
+
 
 networks:
   frontend:

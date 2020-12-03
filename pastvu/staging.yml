@@ -1,122 +1,66 @@
 version: '3.8'
 
-x-logging:
-  &default-logging
-  options:
-    max-size: "512m"
+x-staging:
+  &staging-defaults
+  logging:
+    options:
+      max-size: "512m"
+  deploy:
+    labels:
+      swarmpit.service.deployment.autoredeploy: 'true'
 
 services:
 
   api:
+    << : *staging-defaults
     deploy:
       replicas: 5
-    image: pastvu/pastvu:${TAG:?ERR}
-    networks:
-      - backend
-    configs:
-      - config.js
-    logging: *default-logging
 
-  nginx:
+  fileserver:
+    << : *staging-defaults
     deploy:
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
       replicas: 2
-    logging: *default-logging
 
-  mongo:
-    image: ${MONGO_IMAGE}
-    logging: *default-logging
+  frontend_ru:
+    << : *staging-defaults
+    deploy:
+      replicas: 2
 
   app_ru:
+    << : *staging-defaults
     deploy:
       replicas: 4
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
-      update_config:
-        order: start-first
     secrets:
       - pastvu_log_pass
-    networks:
-      - mailcatcher
-    logging: *default-logging
 
   app_en:
+    << : *staging-defaults
     deploy:
       replicas: 4
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
-      update_config:
-        order: start-first
     secrets:
       - pastvu_log_pass
-    networks:
-      - mailcatcher
-    logging: *default-logging
     
   uploader:
-    deploy:
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
-    logging: *default-logging
+    << : *staging-defaults
         
   downloader:
-    deploy:
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
-    logging: *default-logging
+    << : *staging-defaults
 
   sitemap:
-    deploy:
-      labels:
-        swarmpit.service.deployment.autoredeploy: 'true'
-    logging: *default-logging
+    << : *staging-defaults
 
   notifier_ru:
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.pastvu.pastvu-data == true
-    networks:
-      - backend
-    image: pastvu/pastvu:${TAG:?ERR}
-    environment:
-      - NOTIFIER=true
-      - DOMAIN
-      - PROTOCOL
-    configs:
-      - config.js
+    << : *staging-defaults
     secrets:
       - pastvu_log_pass
-    logging: *default-logging
  
   notifier_en:
-    deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.pastvu.pastvu-data == true
-    networks:
-      - backend
-    image: pastvu/pastvu:${TAG_EN:?ERR}
-    environment:
-      - LANG=en
-      - NOTIFIER=true
-      - DOMAIN
-      - PROTOCOL
-    configs:
-      - config.js
+    << : *staging-defaults
     secrets:
       - pastvu_log_pass
-    logging: *default-logging
 
-networks:
-  backend:
-    driver: overlay
-    attachable: true
-  mailcatcher:
-
+  mongo:
+    << : *staging-defaults
 
 secrets:
   pastvu_log_pass:
@@ -129,4 +73,3 @@ configs:
 
 volumes:
   mongo:
-    name: ${MONGO_VOLUME}
