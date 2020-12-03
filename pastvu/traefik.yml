@@ -25,7 +25,7 @@ services:
         - traefik.http.routers.pastvu-http.middlewares=www-redirect,https-redirect
 
         # HTTPS
-        - traefik.http.routers.pastvu-nginx.rule=Host(`${DOMAIN}`)&&PathPrefix(`/download`, `/sitemap`, `/files`, `/_`, `/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`)
+        - traefik.http.routers.pastvu-nginx.rule=Host(`${DOMAIN}`)&&PathPrefix(`/download`, `/sitemap`, `/files`, `/_`)
         - traefik.http.routers.pastvu-nginx.entrypoints=https
         - traefik.http.routers.pastvu-nginx.tls=true
         - traefik.http.routers.pastvu-nginx.tls.certresolver=le
@@ -33,6 +33,50 @@ services:
 
         # ENABLE LOADBALANCER
         - traefik.http.services.pastvu-nginx.loadbalancer.server.port=80
+
+# FRONTEND =============================================================================
+
+  frontend_ru:
+    imgage: pastvu/frontend:${TAG}
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # HTTPS
+        - traefik.http.routers.pastvu-frontend-ru.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`)
+        - traefik.http.routers.pastvu-frontend-ru.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-ru.tls=true
+        - traefik.http.routers.pastvu-frontend-ru.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-ru.priority=200
+
+        # ENABLE LOADBALANCER
+        - traefik.http.services.pastvu-frontend-ru.loadbalancer.server.port=80
+
+  frontend_ru:
+    image: pastvu/frontend:${TAG_EN}
+    networks:
+      - traefik-public
+    deploy:
+      labels:
+        # ENABLE TRAEFIK
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+
+        # HTTPS
+        - traefik.http.routers.pastvu-frontend-ru.rule=(Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`))&&(HeadersRegexp(`Cookie`, `.*lang=en.*`)||(!HeadersRegexp(`Cookie`,`.*lang.*`)&&HeaderRegexp(`Accept-Language`,`en.*`))
+        - traefik.http.routers.pastvu-frontend-ru.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-ru.tls=true
+        - traefik.http.routers.pastvu-frontend-ru.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-ru.priority=200
+
+        # ENABLE LOADBALANCER
+        - traefik.http.services.pastvu-frontend-ru.loadbalancer.server.port=80
 
   api:
     networks:
