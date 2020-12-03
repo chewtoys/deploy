@@ -29,7 +29,7 @@ services:
         - traefik.http.routers.pastvu-nginx.entrypoints=https
         - traefik.http.routers.pastvu-nginx.tls=true
         - traefik.http.routers.pastvu-nginx.tls.certresolver=le
-        - traefik.http.routers.pastvu-nginx.priority=200
+        - traefik.http.routers.pastvu-nginx.priority=2000
 
         # ENABLE LOADBALANCER
         - traefik.http.services.pastvu-nginx.loadbalancer.server.port=80
@@ -37,7 +37,7 @@ services:
 # FRONTEND =============================================================================
 
   frontend_ru:
-    imgage: pastvu/frontend:${TAG}
+    image: pastvu/frontend:${TAG}
     networks:
       - traefik-public
     deploy:
@@ -47,17 +47,24 @@ services:
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
 
-        # HTTPS
-        - traefik.http.routers.pastvu-frontend-ru.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`)
-        - traefik.http.routers.pastvu-frontend-ru.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-ru.tls=true
-        - traefik.http.routers.pastvu-frontend-ru.tls.certresolver=le
-        - traefik.http.routers.pastvu-frontend-ru.priority=200
+        # DEFAULT
+        - traefik.http.routers.pastvu-frontend-ru-default.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)
+        - traefik.http.routers.pastvu-frontend-ru-default.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-ru-default.tls=true
+        - traefik.http.routers.pastvu-frontend-ru-default.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-ru-default.priority=100
+
+        # COOKIE RU
+        - traefik.http.routers.pastvu-frontend-ru-cookie.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
+        - traefik.http.routers.pastvu-frontend-ru-cookie.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-ru-cookie.tls=true
+        - traefik.http.routers.pastvu-frontend-ru-cookie.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-ru-cookie.priority=400
 
         # ENABLE LOADBALANCER
         - traefik.http.services.pastvu-frontend-ru.loadbalancer.server.port=80
 
-  frontend_ru:
+  frontend_en:
     image: pastvu/frontend:${TAG_EN}
     networks:
       - traefik-public
@@ -68,16 +75,25 @@ services:
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
 
-        # HTTPS
-        - traefik.http.routers.pastvu-frontend-ru.rule=(Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)||Path(`/{file:.*}.{ext:(ico|png|txt|xml)}`))&&(HeadersRegexp(`Cookie`, `.*lang=en.*`)||(!HeadersRegexp(`Cookie`,`.*lang.*`)&&HeaderRegexp(`Accept-Language`,`en.*`))
-        - traefik.http.routers.pastvu-frontend-ru.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-ru.tls=true
-        - traefik.http.routers.pastvu-frontend-ru.tls.certresolver=le
-        - traefik.http.routers.pastvu-frontend-ru.priority=200
+        # ACCEPT-LANG
+        - traefik.http.routers.pastvu-frontend-en-acclang.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Accept-Language`, `^en.*`)
+        - traefik.http.routers.pastvu-frontend-en-acclang.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-en-acclang.tls=true
+        - traefik.http.routers.pastvu-frontend-en-acclang.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-en-acclang.priority=200
+
+        # COOKIE EN
+        - traefik.http.routers.pastvu-frontend-en-cookie.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
+        - traefik.http.routers.pastvu-frontend-en-cookie.entrypoints=https
+        - traefik.http.routers.pastvu-frontend-en-cookie.tls=true
+        - traefik.http.routers.pastvu-frontend-en-cookie.tls.certresolver=le
+        - traefik.http.routers.pastvu-frontend-en-cookie.priority=300
 
         # ENABLE LOADBALANCER
-        - traefik.http.services.pastvu-frontend-ru.loadbalancer.server.port=80
+        - traefik.http.services.pastvu-frontend-en.loadbalancer.server.port=80
 
+# API =============================================================================
+#
   api:
     networks:
       - traefik-public
@@ -100,7 +116,7 @@ services:
         - traefik.http.routers.pastvu-api.tls=true
         - traefik.http.routers.pastvu-api.tls.certresolver=le
         - traefik.http.routers.pastvu-api.middlewares=cors-headers
-        - traefik.http.routers.pastvu-api.priority=100
+        - traefik.http.routers.pastvu-api.priority=3000
 
         # LOADBALANCER
         - traefik.http.services.pastvu-api.loadbalancer.server.port=3000
@@ -119,12 +135,18 @@ services:
         - traefik.constraint-label=traefik-public
 
         # DEFAULT
-        - traefik.http.routers.pastvu-ru.rule=Host(`${DOMAIN}`, `www.${DOMAIN}`)&&HeadersRegexp(`Cookie`, `.*lang=ru.*`)
-        - traefik.http.routers.pastvu-ru.entrypoints=https
-        - traefik.http.routers.pastvu-ru.middlewares=www-redirect
-        - traefik.http.routers.pastvu-ru.tls=true
-        - traefik.http.routers.pastvu-ru.tls.certresolver=le
-        - traefik.http.routers.pastvu-ru.priority=50
+        - traefik.http.routers.pastvu-ru-default.rule=Host(`${DOMAIN}`)
+        - traefik.http.routers.pastvu-ru-default.entrypoints=https
+        - traefik.http.routers.pastvu-ru-default.tls=true
+        - traefik.http.routers.pastvu-ru-default.tls.certresolver=le
+        - traefik.http.routers.pastvu-ru-default.priority=10
+
+        # COOKIE RU
+        - traefik.http.routers.pastvu-ru-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
+        - traefik.http.routers.pastvu-ru-cookie.entrypoints=https
+        - traefik.http.routers.pastvu-ru-cookie.tls=true
+        - traefik.http.routers.pastvu-ru-cookie.tls.certresolver=le
+        - traefik.http.routers.pastvu-ru-cookie.priority=30
 
         # LOADBALANCER
         - traefik.http.services.pastvu-ru.loadbalancer.server.port=3000
@@ -144,13 +166,19 @@ services:
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
 
-        # MAIN
-        - traefik.http.routers.pastvu-en.rule=Host(`${DOMAIN}`, `www.${DOMAIN}`)
-        - traefik.http.routers.pastvu-en.entrypoints=https
-        - traefik.http.routers.pastvu-en.middlewares=www-redirect
-        - traefik.http.routers.pastvu-en.tls=true
-        - traefik.http.routers.pastvu-en.tls.certresolver=le
-        - traefik.http.routers.pastvu-en.priority=20
+        # ACCEPT LANG
+        - traefik.http.routers.pastvu-en-acclang.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Accept-Language`, `^en.*`)
+        - traefik.http.routers.pastvu-en-acclang.entrypoints=https
+        - traefik.http.routers.pastvu-en-acclang.tls=true
+        - traefik.http.routers.pastvu-en-acclang.tls.certresolver=le
+        - traefik.http.routers.pastvu-en-acclang.priority=20
+
+        # COOKIE EN
+        - traefik.http.routers.pastvu-en-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
+        - traefik.http.routers.pastvu-en-cookie.entrypoints=https
+        - traefik.http.routers.pastvu-en-cookie.tls=true
+        - traefik.http.routers.pastvu-en-cookie.tls.certresolver=le
+        - traefik.http.routers.pastvu-en-cookie.priority=40
 
         # LOADBALANCER
         - traefik.http.services.pastvu-en.loadbalancer.server.port=3000
@@ -175,7 +203,7 @@ services:
         - traefik.http.routers.pastvu-uploader.entrypoints=https
         - traefik.http.routers.pastvu-uploader.tls=true
         - traefik.http.routers.pastvu-uploader.tls.certresolver=le
-        - traefik.http.routers.pastvu-uploader.priority=300
+        - traefik.http.routers.pastvu-uploader.priority=1000
 
         # ENABLE LOADBALANCER
         - traefik.http.services.pastvu-uploader.loadbalancer.server.port=3001
