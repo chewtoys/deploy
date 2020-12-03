@@ -8,10 +8,20 @@ x-defaults:
 
 services:
 
-  nginx:
+  fileserver:
     << : *production-defaults
     deploy:
       replicas: 40
+
+  frontend_en:
+    << : *production-defaults
+    deploy:
+      replicas: 2
+
+  frontend_ru:
+    << : *production-defaults
+    deploy:
+      replicas: 2
 
   mongo:
     << : *production-defaults

@@ -26,6 +26,11 @@ services:
     deploy:
       replicas: 2
 
+  frontend_en:
+    << : *staging-defaults
+    deploy:
+      replicas: 2
+
   app_ru:
     << : *staging-defaults
     deploy:
