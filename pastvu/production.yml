@@ -16,12 +16,12 @@ services:
   frontend_en:
     << : *production-defaults
     deploy:
-      replicas: 2
+      replicas: 10
 
   frontend_ru:
     << : *production-defaults
     deploy:
-      replicas: 2
+      replicas: 10
 
   mongo:
     << : *production-defaults
