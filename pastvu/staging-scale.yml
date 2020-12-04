@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+
+  api:
+    deploy:
+      replicas: 5
+
+  fileserver:
+    deploy:
+      replicas: 2
+
+  frontend_ru:
+    deploy:
+      replicas: 2
+
+  frontend_en:
+    deploy:
+      replicas: 2
+
+  app_ru:
+    deploy:
+      replicas: 4
+
+  app_en:
+    deploy:
+      replicas: 4
