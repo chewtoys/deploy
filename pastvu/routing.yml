@@ -170,11 +170,14 @@ services:
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
 
+        - traefik.http.middlewares.upload-limit.buffering.maxRequestBodyBytes=52428800
+
         # HTTPS
         - traefik.http.routers.pastvu-uploader.rule=Host(`${DOMAIN}`)&&PathPrefix(`/upload`)
         - traefik.http.routers.pastvu-uploader.entrypoints=https
         - traefik.http.routers.pastvu-uploader.tls=true
         - traefik.http.routers.pastvu-uploader.tls.certresolver=le
+        - traefik.http.routers.pastvu-uploader.middlewares=uploader-limit
         - traefik.http.routers.pastvu-uploader.priority=1000
 
         # ENABLE LOADBALANCER
