@@ -87,17 +87,17 @@ services:
         - traefik.constraint-label=traefik-public
 
         # ACCEPT-LANGUAGE APP_RU ROUTER
-        - traefik.http.routers.pastvu-ru-acclang.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Accept-Language`, `^ru.*`)
-        - traefik.http.routers.pastvu-ru-acclang.priority=20
+        - traefik.http.routers.pastvu-app-ru-acclang.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Accept-Language`, `^ru.*`)
+        - traefik.http.routers.pastvu-app-ru-acclang.priority=20
 
         # COOKIE APP_RU ROUTER
-        - traefik.http.routers.pastvu-ru-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
-        - traefik.http.routers.pastvu-ru-cookie.priority=40
+        - traefik.http.routers.pastvu-app-ru-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
+        - traefik.http.routers.pastvu-app-ru-cookie.priority=40
 
         # LOADBALANCER
-        - traefik.http.services.pastvu-ru.loadbalancer.server.port=3000
-        - traefik.http.services.pastvu-ru.loadbalancer.sticky.cookie=true
-        - traefik.http.services.pastvu-ru.loadbalancer.sticky.cookie.name=app_ru
+        - traefik.http.services.pastvu-app-ru.loadbalancer.server.port=3000
+        - traefik.http.services.pastvu-app-ru.loadbalancer.sticky.cookie=true
+        - traefik.http.services.pastvu-app-ru.loadbalancer.sticky.cookie.name=app_ru
 
   app_en:
     networks:
@@ -110,17 +110,17 @@ services:
         - traefik.constraint-label=traefik-public
 
         # DEFAULT APP_EN ROUTER
-        - traefik.http.routers.pastvu-en-default.rule=Host(`${DOMAIN}`)
-        - traefik.http.routers.pastvu-en-default.priority=10
+        - traefik.http.routers.pastvu-app-en-default.rule=Host(`${DOMAIN}`)
+        - traefik.http.routers.pastvu-app-en-default.priority=10
 
         # COOKIE APP_EN ROUTER
-        - traefik.http.routers.pastvu-en-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
-        - traefik.http.routers.pastvu-en-cookie.priority=30
+        - traefik.http.routers.pastvu-app-en-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
+        - traefik.http.routers.pastvu-app-en-cookie.priority=30
 
         # LOADBALANCER
-        - traefik.http.services.pastvu-en.loadbalancer.server.port=3000
-        - traefik.http.services.pastvu-en.loadbalancer.sticky.cookie=true
-        - traefik.http.services.pastvu-en.loadbalancer.sticky.cookie.name=app_en
+        - traefik.http.services.pastvu-app-en.loadbalancer.server.port=3000
+        - traefik.http.services.pastvu-app-en.loadbalancer.sticky.cookie=true
+        - traefik.http.services.pastvu-app-en.loadbalancer.sticky.cookie.name=app_en
 
   uploader:
     networks:
