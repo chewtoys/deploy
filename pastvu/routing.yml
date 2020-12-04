@@ -16,24 +16,13 @@ services:
         - traefik.http.middlewares.www-redirect.redirectregex.replacement=https://${DOMAIN}/$${1}
         - traefik.http.middlewares.www-redirect.redirectregex.permanent=true
 
-        # HTTP REDIRECT ROUTER
-        - traefik.http.routers.pastvu-http.rule=HostRegexp(`${DOMAIN}`,`{sub:w+}.${DOMAIN}`)
-        - traefik.http.routers.pastvu-http.entrypoints=http
-        - traefik.http.routers.pastvu-http.middlewares=www-redirect,https-redirect
-
         # WWW REDIRECT ROUTER
         - traefik.http.routers.pastvu-www-redirect.rule=Host(`w.${DOMAIN}`, `ww.${DOMAIN}`, `www.${DOMAIN}`)
-        - traefik.http.routers.pastvu-www-redirect.entrypoints=https
         - traefik.http.routers.pastvu-www-redirect.middlewares=www-redirect
-        - traefik.http.routers.pastvu-www-redirect.tls=true
-        - traefik.http.routers.pastvu-www-redirect.tls.certresolver=le
         - traefik.http.routers.pastvu-www-redirect.priority=5000
 
         # FILESERVER ROUTER
         - traefik.http.routers.pastvu-fileserver.rule=Host(`${DOMAIN}`)&&PathPrefix(`/download`, `/sitemap`, `/files`, `/_`)
-        - traefik.http.routers.pastvu-fileserver.entrypoints=https
-        - traefik.http.routers.pastvu-fileserver.tls=true
-        - traefik.http.routers.pastvu-fileserver.tls.certresolver=le
         - traefik.http.routers.pastvu-fileserver.priority=2000
 
         # ENABLE LOADBALANCER
@@ -53,23 +42,14 @@ services:
 
         # ACCEPT-LANG FRONTEND_RU ROUTER
         - traefik.http.routers.pastvu-frontend-ru-acclang.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Accept-Language`, `^ru.*`)
-        - traefik.http.routers.pastvu-frontend-ru-acclang.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-ru-acclang.tls=true
-        - traefik.http.routers.pastvu-frontend-ru-acclang.tls.certresolver=le
         - traefik.http.routers.pastvu-frontend-ru-acclang.priority=200
 
         # COOKIE FRONTEND_RU ROUTER
         - traefik.http.routers.pastvu-frontend-ru-cookie.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
-        - traefik.http.routers.pastvu-frontend-ru-cookie.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-ru-cookie.tls=true
-        - traefik.http.routers.pastvu-frontend-ru-cookie.tls.certresolver=le
         - traefik.http.routers.pastvu-frontend-ru-cookie.priority=400
 
         # ROOT FRONTEND ROUTER
         - traefik.http.routers.pastvu-frontend-root.rule=Host(`${DOMAIN}`)&&Path(`/{file:.*}.{ext:(ico|png|txt)}`)
-        - traefik.http.routers.pastvu-frontend-root.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-root.tls=true
-        - traefik.http.routers.pastvu-frontend-root.tls.certresolver=le
         - traefik.http.routers.pastvu-frontend-root.priority=50
 
         # ENABLE LOADBALANCER
@@ -87,16 +67,10 @@ services:
 
         # DEFAULT FRONTEND_EN ROUTER
         - traefik.http.routers.pastvu-frontend-en-default.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)
-        - traefik.http.routers.pastvu-frontend-en-default.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-en-default.tls=true
-        - traefik.http.routers.pastvu-frontend-en-default.tls.certresolver=le
         - traefik.http.routers.pastvu-frontend-en-default.priority=100
 
         # COOKIE FRONTEND_EN ROUTER
         - traefik.http.routers.pastvu-frontend-en-cookie.rule=Host(`${DOMAIN}`)&&PathPrefix(`/js`, `/img`, `/style`, `/tpl`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
-        - traefik.http.routers.pastvu-frontend-en-cookie.entrypoints=https
-        - traefik.http.routers.pastvu-frontend-en-cookie.tls=true
-        - traefik.http.routers.pastvu-frontend-en-cookie.tls.certresolver=le
         - traefik.http.routers.pastvu-frontend-en-cookie.priority=300
 
         # ENABLE LOADBALANCER
@@ -114,16 +88,10 @@ services:
 
         # ACCEPT-LANGUAGE APP_RU ROUTER
         - traefik.http.routers.pastvu-ru-acclang.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Accept-Language`, `^ru.*`)
-        - traefik.http.routers.pastvu-ru-acclang.entrypoints=https
-        - traefik.http.routers.pastvu-ru-acclang.tls=true
-        - traefik.http.routers.pastvu-ru-acclang.tls.certresolver=le
         - traefik.http.routers.pastvu-ru-acclang.priority=20
 
         # COOKIE APP_RU ROUTER
         - traefik.http.routers.pastvu-ru-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=ru`)
-        - traefik.http.routers.pastvu-ru-cookie.entrypoints=https
-        - traefik.http.routers.pastvu-ru-cookie.tls=true
-        - traefik.http.routers.pastvu-ru-cookie.tls.certresolver=le
         - traefik.http.routers.pastvu-ru-cookie.priority=40
 
         # LOADBALANCER
@@ -143,16 +111,10 @@ services:
 
         # DEFAULT APP_EN ROUTER
         - traefik.http.routers.pastvu-en-default.rule=Host(`${DOMAIN}`)
-        - traefik.http.routers.pastvu-en-default.entrypoints=https
-        - traefik.http.routers.pastvu-en-default.tls=true
-        - traefik.http.routers.pastvu-en-default.tls.certresolver=le
         - traefik.http.routers.pastvu-en-default.priority=10
 
         # COOKIE APP_EN ROUTER
         - traefik.http.routers.pastvu-en-cookie.rule=Host(`${DOMAIN}`)&&HeadersRegexp(`Cookie`, `past.lang=en`)
-        - traefik.http.routers.pastvu-en-cookie.entrypoints=https
-        - traefik.http.routers.pastvu-en-cookie.tls=true
-        - traefik.http.routers.pastvu-en-cookie.tls.certresolver=le
         - traefik.http.routers.pastvu-en-cookie.priority=30
 
         # LOADBALANCER
@@ -174,9 +136,6 @@ services:
 
         # HTTPS
         - traefik.http.routers.pastvu-uploader.rule=Host(`${DOMAIN}`)&&PathPrefix(`/upload`)
-        - traefik.http.routers.pastvu-uploader.entrypoints=https
-        - traefik.http.routers.pastvu-uploader.tls=true
-        - traefik.http.routers.pastvu-uploader.tls.certresolver=le
         - traefik.http.routers.pastvu-uploader.middlewares=upload-limit
         - traefik.http.routers.pastvu-uploader.priority=1000
 
@@ -201,9 +160,6 @@ services:
 
         # API ROUTER
         - traefik.http.routers.pastvu-api.rule=Host(`${DOMAIN}`)&&PathPrefix(`/api2`)
-        - traefik.http.routers.pastvu-api.entrypoints=https
-        - traefik.http.routers.pastvu-api.tls=true
-        - traefik.http.routers.pastvu-api.tls.certresolver=le
         - traefik.http.routers.pastvu-api.middlewares=cors-headers
         - traefik.http.routers.pastvu-api.priority=3000
 
