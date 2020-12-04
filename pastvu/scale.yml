@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+
+  fileserver:
+    deploy:
+      replicas: 40
+
+  frontend_en:
+    deploy:
+      replicas: 40
+
+  frontend_ru:
+    deploy:
+      replicas: 40
+
+  app_ru:
+    deploy:
+      replicas: 20
+
+  app_en:
+    deploy:
+      replicas: 20
+
+  downloader:
+    deploy:
+      replicas: 10
+
+  api:
+    deploy:
+      replicas: 5

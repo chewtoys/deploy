@@ -10,18 +10,12 @@ services:
 
   fileserver:
     << : *production-defaults
-    deploy:
-      replicas: 40
 
   frontend_en:
     << : *production-defaults
-    deploy:
-      replicas: 40
 
   frontend_ru:
     << : *production-defaults
-    deploy:
-      replicas: 40
 
   mongo:
     << : *production-defaults
@@ -30,8 +24,6 @@ services:
 
   app_ru:
     << : *production-defaults
-    deploy:
-      replicas: 10
     secrets:
       - pastvu_smtp_host
       - pastvu_smtp_user
@@ -42,8 +34,6 @@ services:
 
   app_en:
     << : *production-defaults
-    deploy:
-      replicas: 10
     secrets:
       - pastvu_smtp_host
       - pastvu_smtp_user
@@ -54,16 +44,12 @@ services:
 
   api:
     << : *production-defaults
-    deploy:
-      replicas: 5
 
   uploader:
     << : *production-defaults
 
   downloader:
     << : *production-defaults
-    deploy:
-      replicas: 3
 
   notifier_ru:
     << : *production-defaults

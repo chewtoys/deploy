@@ -43,4 +43,5 @@ docker stack deploy \
 	-c pastvu.yml \
 	-c routing.yml \
 	-c $PASTVU_ENV.yml \
+	-c scale.yml \
 	pastvu
