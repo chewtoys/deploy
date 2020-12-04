@@ -8,11 +8,11 @@ services:
 
   frontend_en:
     deploy:
-      replicas: 40
+      replicas: 20
 
   frontend_ru:
     deploy:
-      replicas: 40
+      replicas: 20
 
   app_ru:
     deploy:
