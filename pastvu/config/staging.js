@@ -9,6 +9,7 @@ module.exports = function (config, appRequire) {
     serveStore: false,
     lang: lang,
     notifier: process.env.NOTIFIER === 'true',
+    primary: process.env.PRIMARY === 'true',
     admin: {
       email: 'support@pastvu.stage'
     },

@@ -28,6 +28,18 @@ services:
   frontend_en:
     image: pastvu/frontend:${TAG_EN?ERR}
 
+  app_primary:
+    << : *app-default 
+    networks:
+      - backend
+    environment:
+      - PRIMARY=true
+      - DOMAIN
+      - PROTOCOL
+    deploy:
+      << : *local-placement
+      mode: global
+
   app_ru:
     << : *app-default
     deploy: *local-placement
