@@ -8,6 +8,8 @@ x-staging:
   deploy:
     labels:
       swarmpit.service.deployment.autoredeploy: 'true'
+  networks:
+    - mailcatcher
 
 services:
 
@@ -75,6 +77,10 @@ configs:
   config.js:
     file: ${CONFIG}
     name: pastvu_config_${CONFIG_TAG}
+
+networks:
+  mailcatcher:
+    external: true
 
 volumes:
   mongo:
