@@ -71,7 +71,7 @@ services:
     networks:
       - backend
     environment:
-      - NOTIFIER=true
+      - MODULE=notifier
       - DOMAIN
       - PROTOCOL
     deploy:
@@ -84,8 +84,8 @@ services:
     networks:
       - backend
     environment:
+      - MODULE=notifier
       - LANG=en
-      - NOTIFIER=true
       - DOMAIN
       - PROTOCOL
     deploy: 
