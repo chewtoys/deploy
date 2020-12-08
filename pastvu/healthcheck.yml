@@ -1,0 +1,27 @@
+version: '3.8'
+
+x-healthcheck:
+  &app-healthcheck
+  healthcheck:
+    test: ["CMD", "./docker-healthcheck.sh"]
+    start_period: 5m
+
+services:
+
+  api:
+    << : *app-healthcheck
+
+  app_primary:
+    << : *app-healthcheck
+
+  app_ru:
+    << : *app-healthcheck
+
+  app_en:
+    << : *app-healthcheck
+
+  notifier_ru:
+    << : *app-healthcheck
+ 
+  notifier_en:
+    << : *app-healthcheck
