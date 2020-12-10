@@ -1,12 +1,10 @@
 version: '3.8'
 
-x-deploy:
-  &local-placement
+x-placement: &local-placement
   placement:
     constraints:
       - node.labels.pastvu.pastvu-data == true
-x-app:
-  &app-default
+x-defaults: &app-default
   image: pastvu/pastvu:${TAG?ERR}
   configs:
     - config.js
