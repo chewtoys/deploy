@@ -4,27 +4,27 @@ services:
 
   fileserver:
     deploy:
-      replicas: 40
+      replicas: 10
 
   frontend_en:
     deploy:
-      replicas: 20
+      replicas: 5
 
   frontend_ru:
     deploy:
-      replicas: 20
+      replicas: 5
 
   app_ru:
     deploy:
-      replicas: 20
+      replicas: 5
 
   app_en:
     deploy:
-      replicas: 20
+      replicas: 5
 
   downloader:
     deploy:
-      replicas: 10
+      replicas: 3
 
   api:
     deploy:
