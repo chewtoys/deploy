@@ -40,11 +40,7 @@ module.exports = function (config, appRequire) {
     storePath: '/store',
     sitemapPath: '/sitemap',
     sitemapGenerateOnStart: true,
-    logPath: '/logs',
-    serveLogAuth: {
-      user: 'admin',
-      pass: secrets.pastvu_log_pass
-    },
+    serveLog: false,
     mongo: {
       connection: 'mongodb://mongo:27017/pastvu',
       pool: 10,

@@ -28,7 +28,6 @@ services:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
-      - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
 
@@ -38,7 +37,6 @@ services:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
-      - pastvu_log_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
 
@@ -57,7 +55,6 @@ services:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
-      - pastvu_log_pass
  
   notifier_en:
     << : *production-defaults
@@ -65,7 +62,6 @@ services:
       - pastvu_smtp_host
       - pastvu_smtp_user
       - pastvu_smtp_pass
-      - pastvu_log_pass
 
 networks:
   mongo:
@@ -79,8 +75,6 @@ secrets:
   pastvu_smtp_user:
     external: true
   pastvu_smtp_pass:
-    external: true
-  pastvu_log_pass:
     external: true
   pastvu_yandex_api_key:
     external: true
