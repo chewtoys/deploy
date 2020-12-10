@@ -123,6 +123,8 @@ services:
       - backend
     environment:
       - MODULE=sitemap
+      - DOMAIN
+      - PROTOCOL
     volumes:
       - sitemap:/sitemap
 
@@ -142,7 +144,7 @@ services:
       - mongo:/data/db
 
   redis:
-    image: redis:5.0.7
+    image: redis:6.0.9
     networks:
       - backend
 
