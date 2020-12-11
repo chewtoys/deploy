@@ -13,7 +13,7 @@ services:
 
   fileserver:
     deploy: *local-placement
-    image: pastvu/fileserver:${TAG?ERR}
+    image: pastvu/fileserver:${TAG_FILESERVER?ERR}
     networks:
       - frontend
     volumes:

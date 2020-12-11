@@ -25,6 +25,7 @@ export CONFIG_TAG=$(cat $CONFIG|mktag)
 export DEPLOY_TAG=$(date|mktag)
 export TAG
 export TAG_EN
+export TAG_FILESERVER=1.0.0
 
 echo ================================
 env|sort
