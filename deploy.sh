@@ -5,10 +5,13 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
-TAG=1.3.10
-TAG_EN=$TAG-en
+TAG="1.3.12"
+TAG_EN="${TAG}-en"
+
 case ${PASTVU_ENV} in
-	production|staging)
+	production)
+		;;
+	staging)
 		;;
 	*)
 		echo PASTVU_ENV IS NOT SET
