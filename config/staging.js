@@ -11,7 +11,7 @@ module.exports = function (config, appRequire) {
     notifier: process.env.MODULE === 'notifier',
     primary: process.env.PRIMARY === 'true',
     admin: {
-      email: 'support@pastvu.stage'
+      email: 'support@pastvu.tk'
     },
     listen: {
       port: 3000
