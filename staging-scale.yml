@@ -4,24 +4,24 @@ services:
 
   api:
     deploy:
-      replicas: 5
+      replicas: 1
 
   fileserver:
     deploy:
-      replicas: 2
+      replicas: 1
 
   frontend_ru:
     deploy:
-      replicas: 2
+      replicas: 1
 
   frontend_en:
     deploy:
-      replicas: 2
+      replicas: 1
 
   app_ru:
     deploy:
-      replicas: 4
+      replicas: 1
 
   app_en:
     deploy:
-      replicas: 4
+      replicas: 1
