@@ -5,10 +5,8 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
-case $PASTVU_ENV in
-	staging)
-		;;
-	production)
+case ${PASTVU_ENV} in
+	production|staging)
 		;;
 	*)
 		echo PASTVU_ENV IS NOT SET
@@ -20,8 +18,8 @@ NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
 # Pastvu config
 export PROTOCOL
 export DOMAIN
-export CONFIG=./config/$PASTVU_ENV.js
-export CONFIG_TAG=$(cat $CONFIG|mktag)
+export CONFIG=./config/${PASTVU_ENV}.js
+export CONFIG_TAG=$(cat ${CONFIG}|mktag)
 export DEPLOY_TAG=$(date|mktag)
 export TAG
 export TAG_EN
@@ -35,14 +33,14 @@ echo Enter to proceed, Ctrl+C to cancel.
 read
 
 # Lint config
-eslint $CONFIG
+eslint ${CONFIG}
 
 # Do the job
-docker node update --label-add pastvu.pastvu-data=true $NODE_ID
+docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
 docker stack deploy \
 	--prune \
 	-c pastvu.yml \
 	-c routing.yml \
-	-c $PASTVU_ENV.yml \
-	-c $PASTVU_ENV-scale.yml \
+	-c ${PASTVU_ENV}.yml \
+	-c ${PASTVU_ENV}-scale.yml \
 	pastvu
