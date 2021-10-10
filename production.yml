@@ -4,7 +4,7 @@ x-defaults:
   &production-defaults
   logging:
     options:
-      max-size: "512m"
+      max-size: "100m"
 
 services:
 
