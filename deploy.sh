@@ -5,7 +5,7 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
-TAG="1.3.12"
+TAG="1.3.13"
 TAG_EN="${TAG}-en"
 
 case ${PASTVU_ENV} in
