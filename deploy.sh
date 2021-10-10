@@ -5,6 +5,9 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
+TAG=1.3.10
+TAG_EN=$TAG-en
+
 case $PASTVU_ENV in
 	staging)
 		;;
