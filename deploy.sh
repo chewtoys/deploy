@@ -5,8 +5,10 @@ source ./share/eslint.subr
 source ./share/aliases
 source ~/env/pastvu.env
 
-TAG="1.3.13"
-TAG_EN="${TAG}-en"
+# Set versions
+export TAG="1.3.13"
+export TAG_EN="${TAG}-en"
+export TAG_FILESERVER="1.0.3"
 
 case ${PASTVU_ENV} in
 	production)
@@ -26,15 +28,11 @@ export DOMAIN
 export CONFIG=./config/${PASTVU_ENV}.js
 export CONFIG_TAG=$(cat ${CONFIG}|mktag)
 export DEPLOY_TAG=$(date|mktag)
-export TAG
-export TAG_EN
-export TAG_FILESERVER="1.0.3"
-
-#env|sort
-#read
 
 # Lint config
 eslint ${CONFIG}
+
+read
 
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
