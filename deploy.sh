@@ -30,12 +30,8 @@ export TAG
 export TAG_EN
 export TAG_FILESERVER=1.0.3
 
-echo ================================
-env|sort
-echo ================================
-echo Does environment look reasonable?
-echo Enter to proceed, Ctrl+C to cancel.
-read
+#env|sort
+#read
 
 # Lint config
 eslint ${CONFIG}
