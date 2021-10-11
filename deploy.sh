@@ -6,8 +6,8 @@ source ./share/aliases
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="1.4.1"
-export TAG_EN="1.4.1-en"
+export TAG="1.4.2"
+export TAG_EN="1.4.2-en"
 export TAG_FILESERVER="1.0.3"
 
 case ${PASTVU_ENV} in
