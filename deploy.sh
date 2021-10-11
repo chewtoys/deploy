@@ -6,8 +6,8 @@ source ./share/aliases
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="1.4.0"
-export TAG_EN="${TAG}-en"
+export TAG="1.4.1"
+export TAG_EN="1.4.1-en"
 export TAG_FILESERVER="1.0.3"
 
 case ${PASTVU_ENV} in
@@ -31,8 +31,6 @@ export DEPLOY_TAG=$(date|mktag)
 
 # Lint config
 eslint ${CONFIG}
-
-read
 
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
