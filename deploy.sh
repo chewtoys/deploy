@@ -6,7 +6,7 @@ source ./share/aliases
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="1.3.13"
+export TAG="1.4.0"
 export TAG_EN="${TAG}-en"
 export TAG_FILESERVER="1.0.3"
 
