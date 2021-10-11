@@ -142,7 +142,7 @@ services:
       - mongo:/data/db
 
   redis:
-    image: redis:6.0.9
+    image: redis:6.2.6
     networks:
       - backend
 
