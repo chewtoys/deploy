@@ -7,7 +7,8 @@ x-placement: &local-placement
 x-defaults: &app-default
   image: pastvu/backend:${TAG?ERR}
   configs:
-    - config.js
+    - source: config.js
+      target: /code/config/local.config.js
 
 services:
 
@@ -37,7 +38,7 @@ services:
     deploy:
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   app_ru:
     << : *app-default
@@ -50,7 +51,7 @@ services:
       - backend
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   app_en:
     << : *app-default
@@ -65,7 +66,7 @@ services:
       - LANG=en
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   notifier_ru:
     << : *app-default 
@@ -78,7 +79,7 @@ services:
     deploy:
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js"
 
   notifier_en:
     << : *app-default 
@@ -93,7 +94,7 @@ services:
     deploy: 
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js"
 
   uploader:
     << : *app-default
@@ -107,7 +108,7 @@ services:
       - MODULE=uploader
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/uploader.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/uploader.js"
 
   downloader:
     << : *app-default
@@ -119,7 +120,7 @@ services:
       - MODULE=downloader
     volumes:
       - store:/store:ro
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/downloader.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/downloader.js"
 
   sitemap:
     << : *app-default
@@ -132,13 +133,13 @@ services:
       - PROTOCOL
     volumes:
       - sitemap:/sitemap
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/sitemap.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/sitemap.js"
 
   api:
     << : *app-default
     networks:
       - backend
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js --config /config.js"
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   mongo:
     deploy:
