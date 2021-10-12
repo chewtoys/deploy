@@ -30,7 +30,7 @@ export CONFIG_TAG=$(cat ${CONFIG}|mktag)
 export DEPLOY_TAG=$(date|mktag)
 
 # Lint config
-eslint ${CONFIG}
+# eslint ${CONFIG}
 
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
