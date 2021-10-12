@@ -3,6 +3,7 @@ version: '3.8'
 x-defaults:
   &production-defaults
   logging:
+    driver: local
     options:
       max-size: "100m"
 

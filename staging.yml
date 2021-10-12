@@ -3,6 +3,7 @@ version: '3.8'
 x-staging:
   &staging-defaults
   logging:
+    driver: local
     options:
       max-size: "512m"
   deploy:
