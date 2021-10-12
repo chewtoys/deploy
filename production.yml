@@ -77,12 +77,6 @@ services:
       - pastvu_smtp_user
       - pastvu_smtp_pass
 
-networks:
-  mongo:
-    driver: overlay
-    attachable: true
-  backend:
-
 secrets:
   pastvu_smtp_host:
     external: true
@@ -94,11 +88,3 @@ secrets:
     external: true
   pastvu_google_api_key:
     external: true
-
-configs:
-  config.js:
-    file: ${CONFIG:?ERR}
-    name: pastvu_config_${CONFIG_TAG:?ERR}
-
-volumes:
-  mongo:

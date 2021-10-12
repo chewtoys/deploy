@@ -156,11 +156,17 @@ services:
     networks:
       - backend
 
+configs:
+  config.js:
+    file: ${CONFIG:?ERR}
+    name: pastvu_config_${CONFIG_TAG:?ERR}
 
 networks:
   frontend:
   backend:
+  mongo:
 
 volumes:
   store:
   sitemap:
+  mongo:
