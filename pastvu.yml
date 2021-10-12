@@ -119,6 +119,7 @@ services:
       - MODULE=downloader
     volumes:
       - store:/store:ro
+    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/downloader.js --config /config.js"
 
   sitemap:
     << : *app-default
