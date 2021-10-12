@@ -38,7 +38,6 @@ services:
     deploy:
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   app_ru:
     << : *app-default
@@ -51,7 +50,6 @@ services:
       - backend
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   app_en:
     << : *app-default
@@ -66,7 +64,6 @@ services:
       - LANG=en
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   notifier_ru:
     << : *app-default 
@@ -79,7 +76,7 @@ services:
     deploy:
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js"
+    command: "bin/run --script notifier"
 
   notifier_en:
     << : *app-default 
@@ -94,7 +91,7 @@ services:
     deploy: 
       << : *local-placement
       mode: global
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/notifier.js"
+    command: "bin/run --script notifier"
 
   uploader:
     << : *app-default
@@ -108,7 +105,7 @@ services:
       - MODULE=uploader
     volumes:
       - store:/store
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/uploader.js"
+    command: "bin/run --script uploader"
 
   downloader:
     << : *app-default
@@ -120,7 +117,7 @@ services:
       - MODULE=downloader
     volumes:
       - store:/store:ro
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/downloader.js"
+    command: "bin/run --script downloader"
 
   sitemap:
     << : *app-default
@@ -133,13 +130,12 @@ services:
       - PROTOCOL
     volumes:
       - sitemap:/sitemap
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/sitemap.js"
+    command: "bin/run --script sitemap"
 
   api:
     << : *app-default
     networks:
       - backend
-    command: "node --max-old-space-size=4096 /code/bin/run.js --script /code/app.js"
 
   mongo:
     deploy:
