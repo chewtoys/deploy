@@ -5,7 +5,7 @@ x-placement: &local-placement
     constraints:
       - node.labels.pastvu.pastvu-data == true
 x-defaults: &app-default
-  image: pastvu/pastvu:${TAG?ERR}
+  image: pastvu/backend:${TAG?ERR}
   configs:
     - config.js
 
@@ -53,7 +53,7 @@ services:
   app_en:
     << : *app-default
     deploy: *local-placement
-    image: pastvu/pastvu:${TAG_EN?ERR}
+    image: pastvu/backend:${TAG_EN?ERR}
     networks:
       - frontend
       - backend
@@ -78,7 +78,7 @@ services:
 
   notifier_en:
     << : *app-default 
-    image: pastvu/pastvu:${TAG_EN:?ERR}
+    image: pastvu/backend:${TAG_EN:?ERR}
     networks:
       - backend
     environment:
