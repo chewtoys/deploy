@@ -5,8 +5,8 @@ alias mktag="shasum|cut -c1-16"
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="1.4.5"
-export TAG_EN="1.4.5-en"
+export TAG="1.4.6"
+export TAG_EN="1.4.6-en"
 export TAG_FILESERVER="1.0.3"
 
 case ${PASTVU_ENV} in
@@ -31,6 +31,7 @@ export DEPLOY_TAG=$(date|mktag)
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
 docker stack deploy \
+	--with-registry-auth \
 	--prune \
 	-c pastvu.yml \
 	-c routing.yml \

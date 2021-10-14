@@ -6,8 +6,6 @@ module.exports = function (config, appRequire) {
     env: 'production',
     servePublic: false,
     serveStore: false,
-    notifier: process.env.MODULE === 'notifier',
-    primary: process.env.PRIMARY === 'true',
     admin: {
       email: 'support@pastvu.com'
     },

@@ -32,12 +32,12 @@ services:
     networks:
       - backend
     environment:
-      - PRIMARY=true
       - DOMAIN
       - PROTOCOL
     deploy:
       << : *local-placement
       mode: global
+    command: "bin/run --primary"
 
   app_ru:
     << : *app-default
@@ -69,7 +69,6 @@ services:
     networks:
       - backend
     environment:
-      - MODULE=notifier
       - DOMAIN
       - PROTOCOL
     deploy:
@@ -83,7 +82,6 @@ services:
     networks:
       - backend
     environment:
-      - MODULE=notifier
       - DOMAIN
       - PROTOCOL
     deploy: 
@@ -99,8 +97,6 @@ services:
     networks:
       - frontend
       - backend
-    environment:
-      - MODULE=uploader
     volumes:
       - store:/store
     command: "bin/run --script uploader"
@@ -111,8 +107,6 @@ services:
     networks:
       - frontend
       - backend
-    environment:
-      - MODULE=downloader
     volumes:
       - store:/store:ro
     command: "bin/run --script downloader"
@@ -123,7 +117,6 @@ services:
     networks:
       - backend
     environment:
-      - MODULE=sitemap
       - DOMAIN
       - PROTOCOL
     volumes:
