@@ -1,13 +1,11 @@
 module.exports = function (config, appRequire) {
   const _ = appRequire('lodash')
   const secrets = appRequire('docker-secret').secrets
-  const lang = process.env.LANG
-  const appHost = 'app_' + lang
+  const appHost = 'app_' + config.lang
   _.merge(config, {
     env: 'production',
     servePublic: false,
     serveStore: false,
-    lang: lang,
     notifier: process.env.MODULE === 'notifier',
     primary: process.env.PRIMARY === 'true',
     admin: {

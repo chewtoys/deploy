@@ -61,7 +61,6 @@ services:
     environment:
       - DOMAIN
       - PROTOCOL
-      - LANG=en
     volumes:
       - store:/store
 
@@ -85,7 +84,6 @@ services:
       - backend
     environment:
       - MODULE=notifier
-      - LANG=en
       - DOMAIN
       - PROTOCOL
     deploy: 
