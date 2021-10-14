@@ -26,8 +26,6 @@ services:
 
   mongo:
     << : *production-defaults
-    networks:
-      - mongo
 
   app_ru:
     << : *production-defaults
