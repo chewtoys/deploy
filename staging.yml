@@ -17,32 +17,32 @@ services:
   api:
     << : *staging-defaults
     deploy:
-      replicas: 5
+      replicas: 1
 
   fileserver:
     << : *staging-defaults
     deploy:
-      replicas: 2
+      replicas: 1
 
   frontend_ru:
     << : *staging-defaults
     deploy:
-      replicas: 2
+      replicas: 1
 
   frontend_en:
     << : *staging-defaults
     deploy:
-      replicas: 2
+      replicas: 1
 
   app_ru:
     << : *staging-defaults
     deploy:
-      replicas: 4
+      replicas: 1
 
   app_en:
     << : *staging-defaults
     deploy:
-      replicas: 4
+      replicas: 1
     
   uploader:
     << : *staging-defaults
