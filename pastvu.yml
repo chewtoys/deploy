@@ -144,6 +144,7 @@ services:
     image: pastvu/mongo:3.2.22
     networks:
       - backend
+      - mongo
     volumes:
       - mongo:/data/db
 
@@ -161,6 +162,7 @@ networks:
   frontend:
   backend:
   mongo:
+    attachable: true
 
 volumes:
   store:
