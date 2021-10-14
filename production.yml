@@ -30,7 +30,7 @@ services:
   app_ru:
     << : *production-defaults
     deploy:
-      replicas: 5    
+      replicas: 10
     secrets:
       - pastvu_smtp_host
       - pastvu_smtp_user
