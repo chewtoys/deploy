@@ -9,6 +9,9 @@ x-defaults: &app-default
   configs:
     - source: config.js
       target: /code/config/local.config.js
+  environment:
+    - DOMAIN
+    - PROTOCOL
 
 services:
 
@@ -31,9 +34,6 @@ services:
     << : *app-default 
     networks:
       - backend
-    environment:
-      - DOMAIN
-      - PROTOCOL
     deploy:
       << : *local-placement
       mode: global
@@ -42,9 +42,6 @@ services:
   app_ru:
     << : *app-default
     deploy: *local-placement
-    environment:
-      - DOMAIN
-      - PROTOCOL
     networks:
       - frontend
       - backend
@@ -58,9 +55,6 @@ services:
     networks:
       - frontend
       - backend
-    environment:
-      - DOMAIN
-      - PROTOCOL
     volumes:
       - store:/store
 
@@ -68,9 +62,6 @@ services:
     << : *app-default 
     networks:
       - backend
-    environment:
-      - DOMAIN
-      - PROTOCOL
     deploy:
       << : *local-placement
       mode: global
@@ -81,9 +72,6 @@ services:
     image: pastvu/backend:${TAG_EN:?ERR}
     networks:
       - backend
-    environment:
-      - DOMAIN
-      - PROTOCOL
     deploy: 
       << : *local-placement
       mode: global
@@ -116,9 +104,6 @@ services:
     deploy: *local-placement
     networks:
       - backend
-    environment:
-      - DOMAIN
-      - PROTOCOL
     volumes:
       - sitemap:/sitemap
     command: "bin/run --script sitemap"
