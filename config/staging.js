@@ -3,7 +3,7 @@ module.exports = function (config, appRequire) {
   const secrets = appRequire('docker-secret').secrets
   const appHost = 'app_' + config.lang
   _.merge(config, {
-    env: 'production',
+    env: process.env.NODE_ENV,
     servePublic: false,
     serveStore: false,
     admin: {
@@ -36,7 +36,6 @@ module.exports = function (config, appRequire) {
     storePath: '/store',
     sitemapPath: '/sitemap',
     sitemapGenerateOnStart: true,
-    logPath: '/logs',
     serveLogAuth: {
       user: 'admin',
       pass: secrets.pastvu_log_pass
