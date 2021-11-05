@@ -53,6 +53,9 @@ services:
   sitemap:
     << : *staging-defaults
 
+  worker:
+    << : *staging-defaults
+
   notifier_ru:
     << : *staging-defaults
  
