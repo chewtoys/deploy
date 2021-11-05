@@ -28,6 +28,12 @@ export CONFIG=./config/${PASTVU_ENV}.js
 export CONFIG_TAG=$(cat ${CONFIG}|mktag)
 export DEPLOY_TAG=$(date|mktag)
 
+# Pull images to reduce number of Dockerhub hits
+for t in $TAG $TAG_EN; do
+	docker pull pastvu/backend:$t
+	docker pull pastvu/frontend:$t
+done
+
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
 docker stack deploy \
