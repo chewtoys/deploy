@@ -108,6 +108,15 @@ services:
       - sitemap:/sitemap
     command: "bin/run --script sitemap"
 
+  worker:
+    << : *app-default
+    deploy:
+      << : *local-placement
+      mode: global
+    networks:
+      - backend
+    command: "bin/run --script worker"
+
   api:
     << : *app-default
     networks:
@@ -117,12 +126,12 @@ services:
     deploy:
       << : *local-placement
       mode: global
-    image: pastvu/mongo:3.2.22
+    image: mongo:4.4
     networks:
       - backend
       - mongo
     volumes:
-      - mongo:/data/db
+      - mongo4:/data/db
 
   redis:
     image: redis:6.2.6
@@ -143,4 +152,4 @@ networks:
 volumes:
   store:
   sitemap:
-  mongo:
+  mongo4:
