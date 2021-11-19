@@ -5,7 +5,7 @@ x-placement: &local-placement
     constraints:
       - node.labels.pastvu.pastvu-data == true
 x-defaults: &app-default
-  image: pastvu/backend:${TAG?ERR}
+  image: ghcr.io/pastvu/backend:${TAG?ERR}
   configs:
     - source: config.js
       target: /code/config/local.config.js
@@ -17,7 +17,7 @@ services:
 
   fileserver:
     deploy: *local-placement
-    image: pastvu/fileserver:${TAG_FILESERVER?ERR}
+    image: ghcr.io/pastvu/fileserver:${TAG_FILESERVER?ERR}
     networks:
       - frontend
     volumes:
@@ -25,10 +25,10 @@ services:
       - sitemap:/sitemap:ro
 
   frontend_ru:
-    image: pastvu/frontend:${TAG?ERR}
+    image: ghcr.io/pastvu/frontend:${TAG?ERR}
 
   frontend_en:
-    image: pastvu/frontend:${TAG_EN?ERR}
+    image: ghcr.io/pastvu/frontend:${TAG_EN?ERR}
 
   app_primary:
     << : *app-default 
@@ -51,7 +51,7 @@ services:
   app_en:
     << : *app-default
     deploy: *local-placement
-    image: pastvu/backend:${TAG_EN?ERR}
+    image: ghcr.io/pastvu/backend:${TAG_EN?ERR}
     networks:
       - frontend
       - backend
@@ -69,7 +69,7 @@ services:
 
   notifier_en:
     << : *app-default 
-    image: pastvu/backend:${TAG_EN:?ERR}
+    image: ghcr.io/pastvu/backend:${TAG_EN:?ERR}
     networks:
       - backend
     deploy: 

@@ -5,9 +5,9 @@ alias mktag="shasum|cut -c1-16"
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="2.0.0-pre1"
-export TAG_EN="2.0.0-en-pre1"
-export TAG_FILESERVER="1.0.3"
+export TAG="v2.0.0-pre3"
+export TAG_EN="v2.0.0-en-pre3"
+export TAG_FILESERVER="master"
 
 case ${PASTVU_ENV} in
 	production)
@@ -30,9 +30,11 @@ export DEPLOY_TAG=$(date|mktag)
 
 # Pull images to reduce number of Dockerhub hits
 for t in $TAG $TAG_EN; do
-	docker pull pastvu/backend:$t
-	docker pull pastvu/frontend:$t
+	docker pull ghcr.io/pastvu/backend:$t
+	docker pull ghcr.io/pastvu/frontend:$t
 done
+docker pull ghcr.io/pastvu/fileserver:$TAG_FILESERVER
+
 
 # Do the job
 docker node update --label-add pastvu.pastvu-data=true ${NODE_ID}
