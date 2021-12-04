@@ -5,8 +5,8 @@ alias mktag="shasum|cut -c1-16"
 source ~/env/pastvu.env
 
 # Set versions
-export TAG="v2.0.0-pre3"
-export TAG_EN="v2.0.0-en-pre3"
+export TAG="v2.0.0"
+export TAG_EN="v2.0.0-en"
 export TAG_FILESERVER="master"
 
 case ${PASTVU_ENV} in
