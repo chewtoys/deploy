@@ -12,6 +12,7 @@ x-defaults: &app-default
   environment:
     - DOMAIN
     - PROTOCOL
+    - NODE_ENV
 
 services:
 

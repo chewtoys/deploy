@@ -9,13 +9,13 @@ export TAG="v2.0.0"
 export TAG_EN="v2.0.0-en"
 export TAG_FILESERVER="master"
 
-case ${PASTVU_ENV} in
+case ${NODE_ENV} in
 	production)
 		;;
 	staging)
 		;;
 	*)
-		echo PASTVU_ENV IS NOT SET
+		echo NODE_ENV IS NOT SET
 		exit 1
 		;;
 esac
@@ -24,7 +24,8 @@ NODE_ID=$(docker info -f '{{.Swarm.NodeID}}')
 # Pastvu config
 export PROTOCOL
 export DOMAIN
-export CONFIG=./config/${PASTVU_ENV}.js
+export NODE_ENV
+export CONFIG=./config/${NODE_ENV}.js
 export CONFIG_TAG=$(cat ${CONFIG}|mktag)
 export DEPLOY_TAG=$(date|mktag)
 
@@ -43,5 +44,5 @@ docker stack deploy \
 	--prune \
 	-c pastvu.yml \
 	-c routing.yml \
-	-c ${PASTVU_ENV}.yml \
+	-c ${NODE_ENV}.yml \
 	pastvu
