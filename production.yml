@@ -3,9 +3,7 @@ version: '3.8'
 x-defaults:
   &production-defaults
   logging:
-    driver: local
-    options:
-      max-size: "100m"
+    driver: syslog
 
 services:
 
@@ -81,11 +79,11 @@ services:
 
 secrets:
   smtp_host:
-    file: ../smtp/host
+    file: ../secrets/smtp_host
   smtp_user:
-    file: ../smtp/user
+    file: ../secrets/smtp_user
   smtp_pass:
-    file: ../smtp/pass
+    file: ../secrets/smtp_pass
   pastvu_yandex_api_key:
     external: true
   pastvu_google_api_key:
