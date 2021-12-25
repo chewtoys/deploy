@@ -50,11 +50,11 @@ module.exports = function (config, appRequire) {
     },
     mail: {
       type: 'SMTP',
-      host: secrets.pastvu_smtp_host,
+      host: secrets.smtp_host,
       port: 25,
       auth: {
-        user: secrets.pastvu_smtp_user,
-        pass: secrets.pastvu_smtp_pass
+        user: secrets.smtp_user,
+        pass: secrets.smtp_pass
       }
     },
     publicApiKeys: {

@@ -32,9 +32,9 @@ services:
     deploy:
       replicas: 10
     secrets:
-      - pastvu_smtp_host
-      - pastvu_smtp_user
-      - pastvu_smtp_pass
+      - smtp_host
+      - smtp_user
+      - smtp_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
 
@@ -43,9 +43,9 @@ services:
     deploy:
       replicas: 5    
     secrets:
-      - pastvu_smtp_host
-      - pastvu_smtp_user
-      - pastvu_smtp_pass
+      - smtp_host
+      - smtp_user
+      - smtp_pass
       - pastvu_yandex_api_key
       - pastvu_google_api_key
 
@@ -68,24 +68,24 @@ services:
   notifier_ru:
     << : *production-defaults
     secrets:
-      - pastvu_smtp_host
-      - pastvu_smtp_user
-      - pastvu_smtp_pass
- 
+      - smtp_host
+      - smtp_user
+      - smtp_pass
+
   notifier_en:
     << : *production-defaults
     secrets:
-      - pastvu_smtp_host
-      - pastvu_smtp_user
-      - pastvu_smtp_pass
+      - smtp_host
+      - smtp_user
+      - smtp_pass
 
 secrets:
-  pastvu_smtp_host:
-    external: true
-  pastvu_smtp_user:
-    external: true
-  pastvu_smtp_pass:
-    external: true
+  smtp_host:
+    file: ../smtp/host
+  smtp_user:
+    file: ../smtp/user
+  smtp_pass:
+    file: ../smtp/pass
   pastvu_yandex_api_key:
     external: true
   pastvu_google_api_key:
