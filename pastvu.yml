@@ -136,6 +136,8 @@ services:
 
   redis:
     image: redis:6.2.6
+    volumes:
+      - redis:/data
     networks:
       - backend
 
@@ -154,3 +156,4 @@ volumes:
   store:
   sitemap:
   mongo4:
+  redis:
