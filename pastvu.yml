@@ -140,6 +140,7 @@ services:
       - redis:/data
     networks:
       - backend
+    command: "redis-server --maxmemory-policy allkeys-lru --save 60 1"
 
 configs:
   config.js:
