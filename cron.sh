@@ -16,7 +16,7 @@ elif [ $LOCAL = $BASE ]; then
 	echo "Need to pull"
 	git pull && \
 	./deploy.sh && \
-	telelog "Application updated" || telelog "Failed to update application"
+	telelog "Application synced" || telelog "Failed to sync application"
 elif [ $REMOTE = $BASE ]; then
 	echo "Need to push"
 else
