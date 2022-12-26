@@ -1,7 +1,9 @@
 #!/bin/bash
-. /etc/telelog.subr
-
 cd $(dirname $0)
+
+. /etc/telelog.subr
+. ${PWD}/pastvu.env
+
 
 # https://stackoverflow.com/questions/3258243/check-if-pull-needed-in-git
 git remote update
@@ -16,7 +18,7 @@ elif [ $LOCAL = $BASE ]; then
 	echo "Need to pull"
 	git pull && \
 	./deploy.sh && \
-	telelog "Application synced" || telelog "Failed to sync application"
+	telelog "Application synced to version ${VERSION}" || telelog "Failed to sync application version ${VERSION}"
 elif [ $REMOTE = $BASE ]; then
 	echo "Need to push"
 else

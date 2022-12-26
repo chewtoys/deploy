@@ -3,9 +3,10 @@ set -exu
 shopt -s expand_aliases
 alias mktag="shasum|cut -c1-16"
 source ~/env/pastvu.env
+source "${PWD}/pastvu.env"
 
 # Set versions
-export TAG="v2.0.10"
+export TAG="v${VERSION}"
 export TAG_EN="${TAG}-en"
 export TAG_FILESERVER="master"
 
