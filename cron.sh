@@ -17,6 +17,7 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
 	echo "Need to pull"
 	git pull && \
+	. ${PWD}/pastvu.env && \
 	./deploy.sh && \
 	telelog "Application synced to version ${VERSION}" || telelog "Failed to sync application version ${VERSION}"
 elif [ $REMOTE = $BASE ]; then
